@@ -11,7 +11,7 @@ export default function Home() {
           <TitleScreen></TitleScreen>
           <div className="flex space-x-4 justify-center">
 
-              <Link href={"/register"}>
+              <Link href={"/login"}>
                          <TitleScreenButton text={"Get Started"}/>
               </Link>
 
