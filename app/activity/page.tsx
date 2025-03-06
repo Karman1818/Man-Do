@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Navbar } from "@/app/components/navbar";
+import {Activity} from "@/app/components/activity";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {app} from "../../firebase.config";
 import {LoginAccessPage} from "@/app/components/loginaccesspage";
@@ -24,7 +25,7 @@ export default function Home() {
         <>
             <Navbar/>
             {user?
-            <p>sigma</p>
+            <Activity/>
             :
             <LoginAccessPage page={"activity"}/>
             }
