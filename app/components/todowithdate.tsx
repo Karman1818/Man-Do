@@ -1,19 +1,26 @@
 "use client"
 
 import { Plus } from "lucide-react"
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Todo} from "./todo"
 import {db} from "@/firebase.config";
-import {query, collection, onSnapshot, updateDoc, doc, addDoc, deleteDoc} from "@firebase/firestore";
+import {query, collection, onSnapshot, updateDoc, doc, addDoc, deleteDoc, setDoc} from "@firebase/firestore";
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
 
 
-export const TodoList = () => {
+export const TodoWithDate = () => {
 
+
+
+    //states
     const [todos, setTodos] = useState([]);
     const [input, setInput] = useState('');
     const [points, setPoints] = useState(0)
     const [completedPoints, setCompletedPoints] = useState(0);
     const [totalPoints, setTotalPoints] = useState(0);
+    const [date, setDate] = useState(null);
+    const [currentDocId, setCurrentDocId] = useState(null);
 
 
 
@@ -38,6 +45,35 @@ export const TodoList = () => {
         setPoints(0)
 
     }
+    // saving dates and points
+
+
+    useEffect(() => {
+        if (date) {
+            saveDateAndPointsAutomatically();
+        }
+    }, [date, completedPoints, totalPoints]);
+
+    const saveDateAndPointsAutomatically = async () => {
+        try {
+            // Format date as string
+            const dateString = date.toISOString().split('T')[0];
+
+            // reference to document with ID = dateString
+            const docRef = doc(db, "Dates_and_Points", dateString);
+
+            // update or create new document
+            await setDoc(docRef, {
+                date: date,
+                completed_points: completedPoints,
+                total_points: totalPoints
+            }, { merge: true }); // Merge prevents overwriting other fields
+
+            setCurrentDocId(dateString);
+        } catch (error) {
+            console.error("saving error:", error);
+        }
+    };
     // Reading todos
     useEffect(() => {
         const q = query(collection(db, 'Data'))
@@ -73,10 +109,33 @@ export const TodoList = () => {
         await deleteDoc(doc(db,'Data',id))
     }
 
+    //datepicker
+    const CustomButton = React.forwardRef(({ value, onClick }, ref) => (
+        <button
+            onClick={onClick}
+            ref={ref}
+            className="px-6 py-3 bg-white text-black text-4xl font-lexend rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none"
+        >
+            {value || 'Select date'}
+        </button>
+    ));
+
 
 
     return(
         <>
+            <div className=" flex flex-col items-center justify-center p-4 font-lexend">
+                <div className="max-w-4xl w-full text-center space-y-6 font-lexend">
+                    <DatePicker
+                        selected={date}
+                        onChange={(selectedDate) => setDate(selectedDate)}
+                        customInput={<CustomButton/>}
+                        dateFormat="dd/MM/yyyy"
+                    />
+
+                </div>
+            </div>
+
             <h3 className="text-3xl sm:text-2xl md:text-3xl lg:text-3xl font-lexend flex justify-center m-16 px-8 sm:px-16 md:px-24 drop-shadow-xl text-center">
                 To-Do List
             </h3>

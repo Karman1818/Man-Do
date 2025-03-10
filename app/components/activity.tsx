@@ -1,5 +1,5 @@
-import {TodoList} from "@/app/components/todolist";
-import {DatePickerButton} from "../components/datepicker"
+import {TodoWithDate} from "@/app/components/todowithdate";
+
 
 export const Activity = () => {
 
@@ -8,8 +8,7 @@ export const Activity = () => {
     return(
         <>
 
-            <DatePickerButton/>
-            <TodoList/>
+            <TodoWithDate/>
             <p>chart</p>
         </>
     )
