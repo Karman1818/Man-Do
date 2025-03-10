@@ -6,6 +6,7 @@ export const Todo = ({todo, toggleComplete, deleteTodo}) => {
             <div className="flex items-center gap-3 flex-1">
                 <input
                     onChange={() => toggleComplete(todo)}
+                    checked={todo.is_done}
                     type="checkbox"
                     className="w-5 h-5 text-black border-2 border-gray-300 rounded focus:ring-black focus:ring-2 cursor-pointer"
                 />

@@ -74,8 +74,6 @@ export const TodoList = () => {
     }
 
 
-    // Debouncing
-
 
     return(
         <>
@@ -95,7 +93,6 @@ export const TodoList = () => {
                         className="flex-1 px-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent placeholder-gray-600"
                     />
                     <input
-                        value={points}
                         onChange={(e) => setPoints(Number(e.target.value))}
                         type="number"
                         placeholder="Set point to your task"
