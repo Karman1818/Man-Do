@@ -9,7 +9,7 @@ export const Activity = () => {
         <>
 
             <TodoWithDate/>
-            <p>chart</p>
+
         </>
     )
 }

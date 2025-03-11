@@ -1,12 +1,16 @@
 "use client"
 
-import { Plus } from "lucide-react"
+import { Plus, ChevronLeft, ChevronRight } from "lucide-react"
 import React, {useEffect, useState} from "react";
 import {Todo} from "./todo"
 import {db} from "@/firebase.config";
 import {query, collection, onSnapshot, updateDoc, doc, addDoc, deleteDoc, setDoc} from "@firebase/firestore";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+
+
+
+
 
 
 export const TodoWithDate = () => {
@@ -21,6 +25,9 @@ export const TodoWithDate = () => {
     const [totalPoints, setTotalPoints] = useState(0);
     const [date, setDate] = useState(null);
     const [currentDocId, setCurrentDocId] = useState(null);
+    const [datesData, setDatesData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(7);
 
 
 
@@ -114,11 +121,47 @@ export const TodoWithDate = () => {
         <button
             onClick={onClick}
             ref={ref}
-            className="px-6 py-3 bg-white text-black text-4xl font-lexend rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none"
+            className="px-6 py-3 bg-white text-black text-4xl font-lexend rounded-lg hover:bg-gray-100 transition-colors duration-200 focus:outline-none shadow-md"
         >
             {value || 'Select date'}
         </button>
     ));
+
+    //table
+    useEffect(() => {
+        const q = query(collection(db, 'Dates_and_Points'))
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            let datesArr = [];
+            querySnapshot.forEach((doc) => {
+                datesArr.push({
+                    id: doc.id,
+                    date: doc.data().date?.toDate(),
+                    completedPoints: doc.data().completed_points,
+                    totalPoints: doc.data().total_points
+                });
+            });
+            // sorting from newest date
+            datesArr.sort((a, b) => b.date - a.date);
+            setDatesData(datesArr);
+        });
+        return () => unsubscribe();
+    }, []);
+
+    //pagination
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = datesData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(datesData.length / itemsPerPage);
+
+    const handlePageChange = (newPage) => {
+        if(newPage < 1 || newPage > totalPages) return;
+        setCurrentPage(newPage);
+    }
+
+    const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1);
+    }
 
 
 
@@ -185,6 +228,98 @@ export const TodoWithDate = () => {
                 <p className="text-gray-600 text-sm font-medium">
                     Total points available: {totalPoints}
                 </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto m-16 p-8 sm:px-16 md:px-24 bg-white rounded-lg ">
+                <div className="flex justify-between items-center mb-8">
+                    <h3 className="text-3xl sm:text-2xl md:text-3xl font-lexend drop-shadow-xl">
+                        Points History
+                    </h3>
+
+                    <div className="flex items-center gap-2">
+                        <label className="text-sm text-gray-600 font-medium">Items per page:</label>
+                        <select
+                            value={itemsPerPage}
+                            onChange={handleItemsPerPageChange}
+                            className="px-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        >
+                            <option value={7}>7</option>
+                            <option value={14}>14</option>
+                            <option value={21}>21</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white border-collapse">
+                        <thead>
+                        <tr className="bg-gray-50">
+                            <th className="p-4 text-sm font-semibold text-gray-700 border-b-2 border-black">Date</th>
+                            <th className="p-4 text-sm font-semibold text-gray-700 border-b-2 border-black">Achieved
+                                points
+                            </th>
+                            <th className="p-4 text-sm font-semibold text-gray-700 border-b-2 border-black">Available
+                                points
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {currentItems.map((entry, index) => (
+                            <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
+                                <td className="p-4 text-sm text-gray-600 border-b-2 border-black">
+                                    {entry.date?.toLocaleDateString('pl-PL')}
+                                </td>
+                                <td className="p-4 text-sm text-gray-600 border-b-2 border-black text-center">
+                                    {entry.completedPoints}
+                                </td>
+                                <td className="p-4 text-sm text-gray-600 border-b-2 border-black text-center">
+                                    {entry.totalPoints}
+                                </td>
+                            </tr>
+                        ))}
+                        {datesData.length === 0 && (
+                            <tr>
+                                <td colSpan="3" className="p-4 text-sm text-gray-500 text-center">
+                                    No data to display
+                                </td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Pagination controls */}
+                <div className="flex justify-center items-center gap-2 mt-8">
+                    <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="p-2 border-2 border-black rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors duration-200"
+                    >
+                        <ChevronLeft className="w-5 h-5"/>
+                    </button>
+
+                    {Array.from({length: totalPages}, (_, i) => i + 1).map(page => (
+                        <button
+                            key={page}
+                            onClick={() => handlePageChange(page)}
+                            className={`px-4 py-2 border-2 border-black rounded-lg ${
+                                currentPage === page
+                                    ? 'bg-black text-white'
+                                    : 'hover:bg-gray-100'
+                            } transition-colors duration-200`}
+                        >
+                            {page}
+                        </button>
+                    ))}
+
+                    <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="p-2 border-2 border-black rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors duration-200"
+                    >
+                        <ChevronRight className="w-5 h-5"/>
+                    </button>
+                </div>
             </div>
 
 
