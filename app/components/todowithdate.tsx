@@ -7,6 +7,8 @@ import {db} from "@/firebase.config";
 import {query, collection, onSnapshot, updateDoc, doc, addDoc, deleteDoc, setDoc} from "@firebase/firestore";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+import { BarChart } from '@mui/x-charts/BarChart';
+import {newDate} from "react-datepicker/dist/date_utils";
 
 
 
@@ -162,6 +164,36 @@ export const TodoWithDate = () => {
         setItemsPerPage(Number(e.target.value));
         setCurrentPage(1);
     }
+
+    //chart
+
+    const today = date || new Date();
+    const oneMonthAgo = new Date(today);
+    oneMonthAgo.setMonth(today.getMonth() - 1);
+
+    const todayData = datesData.find(entry => {
+        const entryDate = entry.date;
+        return entryDate.toISOString().split('T')[0] === today.toISOString().split('T')[0];
+    });
+
+    const oneMonthAgoData = datesData.find(entry => {
+        const entryDate = entry.date;
+        const timeDifference = Math.abs(entryDate - oneMonthAgo);
+        const daysDifference = Math.ceil(timeDifference/(1000*60*60*24));
+        return daysDifference <= 3; // max 3 days difference
+    })
+
+    const chartData = [
+        todayData?.completedPoints || 0,
+        oneMonthAgoData?.completedPoints || 0,
+    ];
+
+    const chartLabels = [
+        todayData ? `Today: ${today.toLocaleDateString('pl-PL')}` : "No data today: ",
+        oneMonthAgoData ? `Month ago: ${oneMonthAgo.toLocaleDateString('pl-PL')}` : "No data month ago: "
+    ]
+
+
 
 
 
@@ -322,6 +354,19 @@ export const TodoWithDate = () => {
                 </div>
             </div>
 
+            <BarChart
+                xAxis={[{
+                    data: chartLabels,
+                    scaleType: 'band',
+                    tickLabelStyle: {
+                        fontSize: 14
+                    }
+                }]}
+                series={[{ data: chartData }]}
+                height={400}
+                width={500}
+                colors={['#4CAF50', '#2196F3']}
+            />
 
         </>
     )
