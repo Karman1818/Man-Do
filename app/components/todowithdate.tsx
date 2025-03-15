@@ -183,18 +183,6 @@ export const TodoWithDate = () => {
         return daysDifference <= 3; // max 3 days difference
     })
 
-    const chartData = [
-        todayData?.completedPoints || 0,
-        oneMonthAgoData?.completedPoints || 0,
-    ];
-
-    const chartLabels = [
-        todayData ? `Today: ${today.toLocaleDateString('pl-PL')}` : "No data today: ",
-        oneMonthAgoData ? `Month ago: ${oneMonthAgo.toLocaleDateString('pl-PL')}` : "No data month ago: "
-    ]
-
-
-
 
 
     return(
@@ -354,19 +342,80 @@ export const TodoWithDate = () => {
                 </div>
             </div>
 
-            <BarChart
-                xAxis={[{
-                    data: chartLabels,
-                    scaleType: 'band',
-                    tickLabelStyle: {
-                        fontSize: 14
-                    }
-                }]}
-                series={[{ data: chartData }]}
-                height={400}
-                width={500}
-                colors={['#4CAF50', '#2196F3']}
-            />
+            <div className="max-w-4xl mx-auto m-16 p-8 sm:px-16 md:px-24 bg-white">
+                <div className="flex justify-center mb-8">
+                    <h3 className="text-3xl sm:text-2xl md:text-3xl font-lexend drop-shadow-xl text-center">
+                        Points Progress Comparison
+                    </h3>
+                </div>
+
+                <div className="flex justify-center">
+                    <BarChart
+                        xAxis={[{
+                            data: [
+                                'Today',
+                                'One Month Ago'
+                            ],
+                            scaleType: 'band',
+                            tickLabelStyle: {
+                                fontSize: 14,
+                                fill: '#4B5563'
+                            },
+                            axisLine: {
+                                stroke: '#000'
+                            }
+                        }]}
+                        yAxis={[{
+                            scaleType: 'linear',
+                            tickLabelStyle: {
+                                fontSize: 14,
+                                fill: '#4B5563'
+                            },
+                            axisLine: {
+                                stroke: '#000'
+                            }
+                        }]}
+                        series={[
+                            {
+                                data: [
+                                    todayData?.completedPoints || 0,
+                                    oneMonthAgoData?.completedPoints || 0
+                                ],
+                                color: '#1E3A8A', // Dark blue
+                                label: 'Completed Points'
+                            },
+                            {
+                                data: [
+                                    todayData?.totalPoints || 0,
+                                    oneMonthAgoData?.totalPoints || 0
+                                ],
+                                color: '#065F46', // Dark green
+                                label: 'Total Points'
+                            }
+                        ]}
+                        height={400}
+                        width={500}
+                        grid={{
+                            vertical: true,
+                            horizontal: true,
+                            stroke: '#E5E7EB'
+                        }}
+                        sx={{
+                            '.MuiChartsAxis-line': {
+                                stroke: '#000!important'
+                            },
+                            '.MuiChartsAxis-tick': {
+                                stroke: '#000!important'
+                            },
+                            '.MuiBarElement-root': {
+                                strokeWidth: 2,
+                                stroke: '#000'
+                            }
+                        }}
+                        margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+                    />
+                </div>
+            </div>
 
         </>
     )
