@@ -1,15 +1,13 @@
-import {TodoWithDate} from "@/app/components/todowithdate";
+"use client"
 
+import { TodoWithDate } from "./todowithdate";
 
 export const Activity = () => {
-
-
-
-    return(
+    return (
         <>
-
-            <TodoWithDate/>
-
+            <TodoWithDate />
         </>
     )
 }
+
+export default Activity;
