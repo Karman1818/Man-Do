@@ -25,17 +25,17 @@ export const TrainingHistory = ({ datesData }) => {
 
     return (
         <div className="max-w-4xl mx-auto m-16 p-8 sm:px-16 md:px-24 bg-white rounded-lg">
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <h3 className="text-3xl sm:text-2xl md:text-3xl font-lexend drop-shadow-xl">
                     Training History
                 </h3>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                     <label className="text-sm text-gray-600 font-medium">Items per page:</label>
                     <select
                         value={itemsPerPage}
                         onChange={handleItemsPerPageChange}
-                        className="px-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        className="px-4 py-2 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent w-full sm:w-auto"
                     >
                         <option value={7}>7</option>
                         <option value={14}>14</option>
@@ -48,25 +48,24 @@ export const TrainingHistory = ({ datesData }) => {
                 <table className="min-w-full bg-white border-collapse">
                     <thead>
                     <tr className="bg-gray-50">
-                        <th className="p-4 text-sm font-semibold text-gray-700 border-b-2 border-black">Date</th>
-                        <th className="p-4 text-sm font-semibold text-gray-700 border-b-2 border-black">Training</th>
+                        <th className="p-4 text-sm font-semibold text-gray-700 border-b-2 border-black text-left">Date</th>
+                        <th className="p-4 text-sm font-semibold text-gray-700 border-b-2 border-black text-left">Training</th>
                     </tr>
                     </thead>
                     <tbody>
                     {currentItems.map((entry, index) => (
                         <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
-                            <td className="p-4 text-sm text-gray-600 border-b-2 border-black">
+                            <td className="p-4 text-sm text-gray-600 border-b-2 border-black text-left">
                                 {entry.date?.toLocaleDateString('pl-PL')}
                             </td>
-                            <td className="p-4 text-sm text-gray-600 border-b-2 border-black text-center">
+                            <td className="p-4 text-sm text-gray-600 border-b-2 border-black text-left">
                                 {entry.training}
                             </td>
-
                         </tr>
                     ))}
                     {datesData.length === 0 && (
                         <tr>
-                            <td colSpan="3" className="p-4 text-sm text-gray-500 text-center">
+                            <td colSpan="2" className="p-4 text-sm text-gray-500 text-center">
                                 No data to display
                             </td>
                         </tr>
@@ -89,7 +88,7 @@ export const TrainingHistory = ({ datesData }) => {
                     <button
                         key={page}
                         onClick={() => handlePageChange(page)}
-                        className={`px-4 py-2 border-2 border-black rounded-lg ${
+                        className={`px-4 py-2 border-2 border-black rounded-lg min-w-[44px] ${
                             currentPage === page
                                 ? 'bg-black text-white'
                                 : 'hover:bg-gray-100'

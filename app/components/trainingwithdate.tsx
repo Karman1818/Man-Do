@@ -13,11 +13,7 @@ import {TrainingHistory} from "@/app/components/traininghistory";
 export const TrainingWithDate = () => {
     // states
     const [input, setInput] = useState('');
-    const [points, setPoints] = useState(0);
-    const [completedPoints, setCompletedPoints] = useState(0);
-    const [totalPoints, setTotalPoints] = useState(0);
     const [date, setDate] = useState(null);
-    const [currentDocId, setCurrentDocId] = useState(null);
     const [datesData, setDatesData] = useState([]);
 
     // Creating todo
@@ -29,6 +25,10 @@ export const TrainingWithDate = () => {
         }
         if (input.length > 200) {
             alert('Your task cant contain more than 200 characters')
+            return
+        }
+        if (date === null){
+            alert('please enter date')
             return
         }
         await addDoc(collection(db, 'Trainings'), {
