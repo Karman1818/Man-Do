@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { PointsCharts } from './pointscharts';
 import {TrainingHistory} from "@/app/components/traininghistory";
+import {TrainingCharts} from "@/app/components/trainingcharts";
 
 
 export const TrainingWithDate = () => {
@@ -110,7 +111,7 @@ export const TrainingWithDate = () => {
 
 
             <TrainingHistory datesData={datesData} />
-            <PointsCharts datesData={datesData} date={date} />
+            <TrainingCharts datesData={datesData} date={date} />
 
         </>
     )
