@@ -1,5 +1,3 @@
-"use client"
-
 import { TodoWithDate } from "./todowithdate";
 
 export const Activity = () => {
@@ -10,4 +8,3 @@ export const Activity = () => {
     )
 }
 
-export default Activity;

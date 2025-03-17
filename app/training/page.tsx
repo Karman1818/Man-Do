@@ -4,6 +4,7 @@ import { Navbar } from "@/app/components/navbar";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {app} from "../../firebase.config";
 import {LoginAccessPage} from "@/app/components/loginaccesspage";
+import {Training} from "@/app/components/training";
 
 
 const auth = getAuth(app);
@@ -24,7 +25,7 @@ export default function Home() {
         <>
             <Navbar/>
             {user?
-            <p>sigma</p>
+            <Training/>
             :
             <LoginAccessPage page="training"/>
             }
