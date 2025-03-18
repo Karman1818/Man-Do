@@ -7,6 +7,7 @@ import {app} from "../../firebase.config";
 import {LoginAccessPage} from "@/app/components/loginaccesspage";
 
 
+
 const auth = getAuth(app);
 
 export default function Home() {
@@ -29,6 +30,7 @@ export default function Home() {
             :
             <LoginAccessPage page={"activity"}/>
             }
+
         </>
     );
 }

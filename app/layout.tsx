@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import {Footer} from "@/app/components/footer";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -29,7 +30,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" className="h-full">
         <head>
             {/* Adding Lexend Exa */}
             <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -40,9 +41,12 @@ export default function RootLayout({
             />
         </head>
         <body
-            className={`${geistSans.variable} ${geistMono.variable} ${lexendExa.variable} antialiased`}
+            className={`${geistSans.variable} ${geistMono.variable} ${lexendExa.variable} antialiased h-full flex flex-col`}
         >
-        {children}
+        <div className="flex-1">
+            {children}
+        </div>
+        <Footer/>
         </body>
         </html>
     );

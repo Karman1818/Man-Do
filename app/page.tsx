@@ -4,6 +4,7 @@ import {TitleScreenButton} from "@/app/components/titlescreenbutton";
 import Link from "next/link";
 
 
+
 export default function Home() {
   return (
       <>
@@ -19,6 +20,8 @@ export default function Home() {
                   <TitleScreenButton text={"Track Your Progress"}/>
               </Link>
           </div>
+
+
 
 
       </>
