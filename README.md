@@ -123,7 +123,7 @@ Ensure you have the following installed on your machine:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/Man-Do.git
+   git clone https://github.com/Karman1818/Man-Do.git
    cd Man-Do
    ```
 
@@ -201,7 +201,7 @@ In the project directory, you can run the following commands:
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!  
-Feel free to check out the [issues page](https://github.com/your-username/Man-Do/issues).
+Feel free to check out the [issues page](https://github.com/Karman1818/Man-Do/issues).
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -214,3 +214,4 @@ Feel free to check out the [issues page](https://github.com/your-username/Man-Do
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+
